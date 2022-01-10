@@ -13,8 +13,9 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
-export default function actionPost() {
+export default function actionPost(props) {
   //const url = "http://localhost:3001/post";
 
   const [title, setTitle] = useState();
@@ -26,10 +27,21 @@ export default function actionPost() {
   const toast = useToast();
 
   const url = "http://localhost:3001/post/";
-
+  const { query } = useRouter();
   useEffect(() => {
-    axios.get(url);
-  });
+    if (query.id) {
+      console.log("on passe ? ");
+      axios.get(url + query.id).then((response) => {
+        setTitle(response.data.data.Title);
+        setSubtitle(response.data.data.Subtitle);
+        setTag(response.data.data.Tags);
+        setImage(response.data.data.Image);
+        setContent(response.data.data.Content);
+        setDate(response.data.data.Date);
+      });
+    }
+  }, []);
+
   function sendData() {
     let data = {
       Title: title,
@@ -64,6 +76,39 @@ export default function actionPost() {
     });
   }
 
+  function updateData() {
+    let data = {
+      Title: title,
+      Subtitle: subTitle,
+      Content: content,
+      Date: date,
+      Tags: tag,
+      Image: image,
+    };
+
+    axios.patch(url + query.id, data).then((response) => {
+      console.log(response.status);
+
+      if (response.status == 200) {
+        toast({
+          title: "Article modifié",
+          description: "Votre article a bien été modifié",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Erreur lors de la modification de l'article",
+          description:
+            "Il y a eu un problème lors de la modification de votre article veuillez réessayer ",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    });
+  }
   return (
     <Flex width="full" align="center" justifyContent="center">
       <Box
@@ -120,7 +165,7 @@ export default function actionPost() {
                 <option value="option3">Option 3</option>
               </Select>
             </FormControl>
-            <Button onClick={sendData}>Publier</Button>
+            <Button onClick={query.id ? updateData : sendData}>Publier</Button>
           </form>
         </Box>
       </Box>

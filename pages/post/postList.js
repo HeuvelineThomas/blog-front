@@ -1,20 +1,40 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Container, Text, Box, Badge, Button } from "@chakra-ui/react";
-import Link from "next/link";
+import { Text, Box, Badge, Button, Flex, Link } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { useToast } from "@chakra-ui/react";
 
 export default function postList() {
-  console.log("on passe ? ");
-
   const url = "http://localhost:3001/post";
   const [posts, setPosts] = useState([]);
+  const toast = useToast();
+
+  function dropPost(id) {
+    axios.delete(url + "/" + id).then((response) => {
+      console.log(url + "/" + id);
+      if (response.status === 200)
+        toast({
+          title: "Article supprimé",
+          description: "Votre article a bien été supprimé",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+    });
+  }
   useEffect(() => {
     axios.get(url).then((response) => {
       setPosts(response.data.post);
     });
-  }, []);
+  });
   return (
     <div>
+      <NextLink href={`./actionPost`} passHref>
+        <Link as={Button} colorScheme="teal" variant="solid">
+          Nouveau post{" "}
+        </Link>
+      </NextLink>
+
       {posts.map((post) => (
         <Box p="10" border={"solid 1px"} margin={"20px"} borderRadius={"10px"}>
           <Box display="flex" alignItems="baseline">
@@ -55,7 +75,18 @@ export default function postList() {
           <Box display="flex" mt="2" alignItems="center">
             <Text>{post.Content}</Text>
           </Box>
-          <Link href={`post/actionPost/${post.Id}`}>Modifier </Link>
+          <Flex>
+            <NextLink href={`./actionPost?id=${post.Id}`}>
+              <Link>Modifier</Link>
+            </NextLink>
+            <Button
+              colorScheme="teal"
+              variant="solid"
+              onClick={() => dropPost(post.Id)}
+            >
+              Supprimer
+            </Button>
+          </Flex>
         </Box>
       ))}
     </div>
