@@ -1,31 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function getComments() {
-    const url = "http://localhost:3001/comment";
-    const [comments, setComments] = useState([]);
-    useEffect(() => {
-      axios.get(url).then((response) => {
-        setComments(response.data.comment);
-      });
-    }, []);
-    console.log(comment);
+  const url = "http://localhost:3001/comments";
+  const [comments, setComments] = useState([]);
+  useEffect(() => {
+    axios.get(url).then((response) => {
+      setComments(response.data.comments);
+    });
+  }, []);
+  console.log(comments);
 
-    return (
-        <div>
-        <input 
-            type='text' 
-            value={comment}
-            onChange={e => setComment(e.target.value)}/>
-        <button onClick={submitComment}> Submit </button>
-        <button onClick={getComments}> Get all comments</button>
-        {comments.map((comment) => {
-            return ( 
-                <div key={comment.id}>
-                    {comment.content} {comment.author}
-                </div>
-            )
-        })}
-
-        </div>
-    )
+  return (
+    <div>
+      {comments.map((comment) => {
+        <div key={comment.id}>
+          <p>{comment.Content}</p>
+          <p>{comment.Date}</p>
+        </div>;
+      })}
+    </div>
+  );
 }
+/*
+  <input
+        type="text"
+        value={comments}
+        onChange={(e) => setComments(e.target.value)}
+      />
+      <button onClick={submitComment}> Submit </button>
+      <button onClick={getComments}> Get all comments</button>
+
+*/

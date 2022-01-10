@@ -25,6 +25,7 @@ export default function actionPost() {
   const [tag, setTag] = useState("fun");
   const [image, setImage] = useState("image");
 
+  console.log(title);
   function sendData() {
     let data = {
       Title: title,
@@ -35,17 +36,17 @@ export default function actionPost() {
       Image: image,
     };
     console.log(data);
-    axios.post(url, data).then((response) => {
-      console.log("data envoyé");
-    });
+    let request = axios.post(url, data);
+    if (request.status === 200) {
+      alert("form envoyé ");
+    }
   }
 
-  useEffect(() => {});
   return (
     <Flex width="full" align="center" justifyContent="center">
       <Box
         p={8}
-        maxWidth="500px"
+        maxWidth="1000px"
         borderWidth={1}
         borderRadius={8}
         boxShadow="lg"
@@ -54,9 +55,7 @@ export default function actionPost() {
           <Heading>Ajouter un post</Heading>
         </Box>
         <Box my={4} textAlign="left">
-          <form
-          //  onSubmit={handleSubmit}
-          >
+          <form onSubmit={sendData}>
             <FormControl isRequired>
               <FormLabel>Titre</FormLabel>
               <Input
@@ -96,15 +95,7 @@ export default function actionPost() {
                 <option value="option3">Option 3</option>
               </Select>
             </FormControl>
-            <Button
-              variant="outline"
-              type="submit"
-              width="full"
-              mt={4}
-              onClick={() => sendData()}
-            >
-              Publier
-            </Button>
+            <Button onClick={sendData}>Publier</Button>
           </form>
         </Box>
       </Box>
