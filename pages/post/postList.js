@@ -1,8 +1,11 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Container, Text, Box, Badge } from "@chakra-ui/react";
+import { Container, Text, Box, Badge, Button } from "@chakra-ui/react";
+import Link from "next/link";
 
 export default function postList() {
+  console.log("on passe ? ");
+
   const url = "http://localhost:3001/post";
   const [posts, setPosts] = useState([]);
   useEffect(() => {
@@ -10,11 +13,10 @@ export default function postList() {
       setPosts(response.data.post);
     });
   }, []);
-  console.log(posts);
   return (
     <div>
       {posts.map((post) => (
-        <Box p="6">
+        <Box p="10" border={"solid 1px"} margin={"20px"} borderRadius={"10px"}>
           <Box display="flex" alignItems="baseline">
             <Badge borderRadius="full" px="2" colorScheme="teal">
               {post.Date}
@@ -53,6 +55,7 @@ export default function postList() {
           <Box display="flex" mt="2" alignItems="center">
             <Text>{post.Content}</Text>
           </Box>
+          <Link href={`post/actionPost/${post.Id}`}>Modifier </Link>
         </Box>
       ))}
     </div>
