@@ -1,47 +1,67 @@
 import { useRouter } from 'next/router'
 import { Navbar } from '../../components/Navbar'
+import { 
+    Box,
+    Button,
+    Heading, 
+    FormControl,
+    FormLabel,
+    Input,
+    useToast, 
+} from "@chakra-ui/react"
+
+
 
 const api = "http://localhost:3001/"
 const front = "http://localhost:3000/"
 
 function createTag() {
+    
+    const toast = useToast();
     const router = useRouter();
     const registerTag = async event => {
-        event.preventDefault();
-
-        const res = await fetch (
-            api + 'tag',
-            {
-                body: JSON.stringify({
-                    Name: event.target.name.value
-                }),
-                headers: {
-                    'Content-Type' : 'application/json'
-                },
-                method: 'POST'
-            }
-        )
-        
-        alert("Tag a bien été créé !")
+        try{
+            const res = await fetch (
+                api + 'tag',
+                {
+                    body: JSON.stringify({
+                        Name: event.target.name.value
+                    }),
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    method: 'POST'
+                })
+                // router.push('/listTag')
+                {toast({
+                    title: "Tag créé",
+                    description: "Le tag a bien été créé",
+                    status: "success",
+                    duration: 9000,
+                    isClosable: true,
+                })}
+        }catch(err){
+            console.log(err)
+        }
     }
-  
     return (
 
         <div>
             <Navbar/>
-            <div className="table-title">
-                <h1 className="pageTitle">Création d'un nouveau tag :</h1>
-            </div>
-        
+            <Box className="table-title">
+                <Heading as="h1" color="#fff" paddingLeft="0.5em">Création d'un tag</Heading>
+            </Box>
 
-            <form onSubmit={registerTag}>
-                <label className="labelForm" htmlFor="name">Name : </label><br></br>
-                <input id="name" name="name" type="text" autoComplete="name" required />
-                <br></br>
-                <br></br>
-                <button type="submit">Register</button>
-            </form>
-       </div> 
+            <Box mt={'1em'}>
+                <form onSubmit={registerTag}>
+                    <FormControl isRequired>
+                        <FormLabel htmlFor='name' >Nom</FormLabel>
+                        <Input id='email' type='text' name='name' mb={"0.5em"}/>
+                    </FormControl>
+                    <Button m={'1em 0'} color={'#fff'} backgroundColor={'#435d7d'} _hover={'none'} type="submit">Enregistrer</Button>
+                </form>
+            </Box>
+        </div> 
         
     )
 }

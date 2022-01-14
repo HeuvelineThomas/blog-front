@@ -1,82 +1,87 @@
 import { Navbar } from '../../components/Navbar'
-import Cors from 'cors'
+import { 
+    Box,
+    Heading, 
+    FormControl, 
+    FormLabel, 
+    Input, 
+    useToast, 
+    Button } 
+from "@chakra-ui/react"
 
-// Initializing the cors middleware
-const cors = Cors({
-  methods: ['GET', 'HEAD', 'PATCH'],
-})
 
 const api = "http://localhost:3001/";
-  
 
-const updateTag = async event => {
-    event.preventDefault();
-    console.log(event.target.name.value)
-
-    try {
-        const res = await fetch (
-            api + 'tag/12',
-            {
-                body: JSON.stringify({
-                    Name: event.target.name.value
-                }),
-                headers: {
-                    'Content-Type' : 'application/json'
-                },
-                method: 'PATCH'
-            }
-            )
-            alert("Tout à bien été envoyé")
-            router.reload(window.location.pathname)
-    } catch(err) {
-        console.log(err)
+function updateTag(tag) {
+    const toast = useToast();
+    const patchTag = async event => {
+        try {
+            const res = await fetch (
+                api + 'tag/' + tag.tag.data.Id,
+                {
+                    body: JSON.stringify({
+                        Name: event.currentTarget.name.value
+                    }),
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    method: 'PATCH'
+                })
+                {toast({
+                    title: "Tag modifié",
+                    description: "Le tag a bien été modifié",
+                    status: "success",
+                    duration: 9000,
+                    isClosable: true,
+                })}
+        } catch(err) {
+            console.log(err)
+        }
     }
-
-}
-
-function editTag(tags) {
+    
     return (
         <div>
             <Navbar/>
-            <div className="table-title">
-                <h1 className="pageTitle">Edition du tag numéro {tags.tags.data.Id}</h1>
-            </div>
-            
-            <form onSubmit={updateTag}>
-                <label className="labelForm" htmlFor="name">Name : </label><br></br>
-                <input id="name" defaultValue={tags.tags.data.Name} name="name" type="text" autoComplete="name" required />
-                <br></br>
-                <br></br>
-                <button onClick={updateTag} type="submit">Register</button>
-                {/* <button type="submit">Register</button> */}
-            </form>
-         </div>
-     )
- }
+            <Box bgColor={'#435d7d'} height={'3em'}>
+                <Heading as="h1" color="#fff" paddingLeft="0.5em">Édition du tag numéro {tag.tag.data.Id}</Heading>
+            </Box>
 
- export async function getStaticPaths() {
+            <Box mt={'1em'}>
+                <form onSubmit={patchTag}>
+                    <FormControl isRequired>
+                        <FormLabel htmlFor='name' >Nom</FormLabel>
+                        <Input defaultValue={tag.tag.data.Name} id='name' type='text' name='title' mb={"0.5em"}/>
+                    </FormControl>
+                    <Button m={'1em 0'} color={'#fff'} backgroundColor={'#435d7d'} _hover={'none'} type="submit">Enregistrer</Button>
+                </form>
+            </Box>    
+        </div>
+    )
+}
+
+export async function getStaticPaths() {
     // Call an external API endpoint to get posts
     const res = await fetch(api + "tag")
     const tag = await res.json()
-
+    
     // Get the paths we want to pre-render based on posts
     const paths = tag.tag.map(tag => ({
-      params: { id: tag.Id.toString()},
+        params: { id: tag.Id.toString()},
     }))
-        // We'll pre-render only these paths at build time.
+    // We'll pre-render only these paths at build time.
     // { fallback: false } means other routes should 404.
     return { paths, fallback: false }
-  }
+}
 
- export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }) {
     const res = await fetch(api + `tag/${params.id}`)
-    const tags = await res.json()
+    const tag = await res.json()
+    
+    return {
+        props: {
+            tag
+        }
+    }
+}
 
-     return {
-         props: {
-             tags
-         }
-     }
- }
-
- export default editTag
+export default updateTag
