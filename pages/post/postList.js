@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Navbar } from '../../components/Navbar'
 import { useState, useEffect } from "react";
 import { Text, Box, Badge, Button, Flex, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
@@ -29,6 +30,7 @@ export default function postList() {
   });
   return (
     <div>
+      <Navbar/>
       <NextLink href={`./actionPost`} passHref>
         <Link as={Button} colorScheme="teal" variant="solid">
           Nouveau post{" "}
