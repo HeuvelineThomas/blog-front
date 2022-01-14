@@ -32,7 +32,6 @@ function createTag() {
                     },
                     method: 'POST'
                 })
-                // router.push('/listTag')
                 {toast({
                     title: "Tag créé",
                     description: "Le tag a bien été créé",
@@ -48,7 +47,7 @@ function createTag() {
 
         <div>
             <Navbar/>
-            <Box className="table-title">
+            <Box bgColor={'#435d7d'} height={'3em'}>
                 <Heading as="h1" color="#fff" paddingLeft="0.5em">Création d'un tag</Heading>
             </Box>
 
