@@ -1,37 +1,37 @@
-import Link from 'next/link'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
+import {
+    Box,
+    Menu,
+    MenuButton,
+    Link,
+    Button,
+} from '@chakra-ui/react'
+
 
 export const Navbar = () => {
     const router = useRouter()
     return (
         <div>
-            <ul className="navbar">
-                <li className={router.pathname == "/" ? "active" : ""}>
-                    <Link href="/">
-                        <a>Accueil</a>
-                    </Link>
-                </li>
-                <li className={router.pathname == "/tags/listTag" ? "active" : ""}>
-                    <Link href="/tags/listTag">
-                        <a>Tags</a>
-                    </Link>
-                </li>
-                <li className={router.pathname == "/posts/listPost" ? "active" : ""}>
-                    <Link href="/">
-                        <a>Posts</a>
-                    </Link>
-                </li>
-                <li className={router.pathname == "/authors/listAuthor" ? "active" : ""}>
-                    <Link href="/">
-                        <a>Authors</a>
-                    </Link>
-                </li>
-                <li className={router.pathname == "/comments/listComment" ? "active" : ""}>
-                    <Link href="/">
-                        <a>Comments</a>
-                    </Link>
-                </li>
-            </ul>
+            <Box border={'solid', '1px', '#e7e7e7'} backgroundColor={'#f3f3f3'} width={'auto'} mb={'1em'}>
+                <Menu >
+                    <MenuButton onClick={() => router.push("/")} as={Button} borderRadius={'0'} height={"3em"} backgroundColor={'#f3f3f3'} _hover={{ bg:'#dbdbdb'}}>
+                        Accueil
+                    </MenuButton>
+                    <MenuButton onClick={() => router.push("/posts/listPost")} as={Button} borderRadius={'0'} height={"3em"} backgroundColor={'#f3f3f3'} _hover={{ bg:'#dbdbdb'}}>
+                        Posts
+                    </MenuButton>
+                    <MenuButton onClick={() => router.push("/authors/listAuthor")} as={Button} borderRadius={'0'} height={"3em"} backgroundColor={'#f3f3f3'} _hover={{ bg:'#dbdbdb'}}>
+                        Authors
+                    </MenuButton>
+                    <MenuButton onClick={() => router.push("/comments/listComment")} as={Button} borderRadius={'0'} height={"3em"} backgroundColor={'#f3f3f3'} _hover={{ bg:'#dbdbdb'}}>
+                        Comments
+                    </MenuButton>
+                    <MenuButton onClick={() => router.push("/tags/listTag")} as={Button} borderRadius={'0'} height={"3em"} backgroundColor={'#f3f3f3'} _hover={{ bg:'#dbdbdb'}}>
+                        Tags
+                    </MenuButton>
+                </Menu>
+            </Box>
         </div>
     )
 }
