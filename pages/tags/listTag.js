@@ -45,7 +45,7 @@ function tagList(tags) {
             <div>
             <Navbar/>  
                 <Box bgColor={'#435d7d'} height={'3em'}>
-                    <Heading as="h1" verticalAlign={'middle'} color="#fff">Liste des tags</Heading>
+                    <Heading as="h1" paddingLeft={'0.5em'} color="#fff">Liste des tags</Heading>
                 </Box>
                 <Button m={'1em 0'} backgroundColor={'#435d7d'} _hover={'none'}>
                     <NextLink href='/tags/createTag'>
