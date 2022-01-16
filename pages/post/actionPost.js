@@ -22,15 +22,18 @@ export default function actionPost(props) {
   const [subTitle, setSubtitle] = useState();
   const [content, setContent] = useState();
   const [date, setDate] = useState(new Date().toString());
-  const [tag, setTag] = useState("fun");
+  const [tag, setTag] = useState();
+  const [tags, setTags] = useState([]);
   const [image, setImage] = useState("image");
+  const [authors, setAuthors] = useState([]);
+  const [author, setAuthor] = useState([]);
+
   const toast = useToast();
 
   const url = "http://localhost:3001/post/";
   const { query } = useRouter();
   useEffect(() => {
     if (query.id) {
-      console.log("on passe ? ");
       axios.get(url + query.id).then((response) => {
         setTitle(response.data.data.Title);
         setSubtitle(response.data.data.Subtitle);
@@ -42,6 +45,18 @@ export default function actionPost(props) {
     }
   }, []);
 
+  useEffect(() => {
+    axios.get("http://localhost:3001/tag/").then((response) => {
+      setTags(response.data.tag);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/author/").then((response) => {
+      setAuthors(response.data.author);
+    });
+  }, []);
+
   function sendData() {
     let data = {
       Title: title,
@@ -50,11 +65,11 @@ export default function actionPost(props) {
       Date: date,
       Tags: tag,
       Image: image,
+      Author: author,
+      Tag: tag,
     };
 
     axios.post(url, data).then((response) => {
-      console.log(response.status);
-
       if (response.status == 201) {
         toast({
           title: "Article ajouté",
@@ -87,8 +102,6 @@ export default function actionPost(props) {
     };
 
     axios.patch(url + query.id, data).then((response) => {
-      console.log(response.status);
-
       if (response.status == 200) {
         toast({
           title: "Article modifié",
@@ -151,18 +164,24 @@ export default function actionPost(props) {
             </FormControl>
             <FormControl mt={6}>
               <FormLabel> Tag</FormLabel>
-              <Select placeholder="Select option">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
+              <Select
+                placeholder="Select option"
+                onChange={(event) => setTag(event.currentTarget.value)}
+              >
+                {tags.map((tag) => (
+                  <option value={tag.Id}>{tag.Name}</option>
+                ))}
               </Select>
             </FormControl>
             <FormControl mt={6}>
               <FormLabel> Autheur</FormLabel>
-              <Select placeholder="Select option">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
+              <Select
+                placeholder="Select option"
+                onChange={(event) => setAuthor(event.currentTarget.value)}
+              >
+                {authors.map((author) => (
+                  <option value={author.Id}>{author.Name}</option>
+                ))}
               </Select>
             </FormControl>
             <Button onClick={query.id ? updateData : sendData}>Publier</Button>

@@ -1,6 +1,22 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Text, Box, Badge, Button, Flex, Link } from "@chakra-ui/react";
 
+/*
+export default function handler(req, res) {
+    if (req.method === 'GET'){
+        res.status(200).json({ name: 'John Doe' })
+    } else if (req.method === 'POST'){
+        const comment = req.body.comment
+        const newComment = {
+            Content : comment,
+            Date : String(Date.now()),
+            Point : 0,
+            // post : 
+            // author : 
+        }
+    }
+  }*/
 export default function getComments() {
   const url = "http://localhost:3001/comments";
   const [comments, setComments] = useState([]);
@@ -9,17 +25,15 @@ export default function getComments() {
       setComments(response.data.comments);
     });
   }, []);
-  console.log(comments);
-
   return (
-    <div>
-      {comments.map((comment) => {
-        <div key={comment.id}>
-          <p>{comment.Content}</p>
+    <Box p={"10"} border={"solid 1px"} width={"30%"}>
+      {comments.map((comment) => (
+        <Box key={comment.Id} className={"blabla"}>
+          <Text>{comment.Content}</Text>
           <p>{comment.Date}</p>
-        </div>;
-      })}
-    </div>
+        </Box>
+      ))}
+    </Box>
   );
 }
 /*

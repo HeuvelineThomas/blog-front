@@ -7,11 +7,12 @@ import { useToast } from "@chakra-ui/react";
 export default function postList() {
   const url = "http://localhost:3001/post";
   const [posts, setPosts] = useState([]);
+  const [tags, setTags] = useState([]);
+
   const toast = useToast();
 
   function dropPost(id) {
     axios.delete(url + "/" + id).then((response) => {
-      console.log(url + "/" + id);
       if (response.status === 200)
         toast({
           title: "Article supprimé",
@@ -22,15 +23,31 @@ export default function postList() {
         });
     });
   }
+
   useEffect(() => {
     axios.get(url).then((response) => {
       setPosts(response.data.post);
     });
+    axios.get("http://localhost:3001/tag").then((response) => {
+      setTags(response.data.tags);
+    });
   });
+
+  /*
+  useEffect(() => {
+    axios.get("http://localhost:3001/tag/" + tagId).then((response) => {
+      setPosts(response.data.post);
+    });
+  });*/
   return (
     <div>
       <NextLink href={`./actionPost`} passHref>
-        <Link as={Button} colorScheme="teal" variant="solid">
+        <Link
+          as={Button}
+          colorScheme="teal"
+          variant="solid"
+          textAlign={"right"}
+        >
           Nouveau post{" "}
         </Link>
       </NextLink>
