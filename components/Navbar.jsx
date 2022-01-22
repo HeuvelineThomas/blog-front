@@ -15,7 +15,7 @@ export const Navbar = () => {
         <div>
             <Box border={'solid', '1px', '#e7e7e7'} backgroundColor={'#f3f3f3'} width={'auto'} mb={'1em'}>
                 <Menu >
-                    <MenuButton onClick={() => router.push("/")} as={Button} borderRadius={'0'} height={"3em"} backgroundColor={'#f3f3f3'} _hover={{ bg:'#dbdbdb'}}>
+                    <MenuButton onClick={() => router.push("/post/postList")} as={Button} borderRadius={'0'} height={"3em"} backgroundColor={'#f3f3f3'} _hover={{ bg:'#dbdbdb'}}>
                         Accueil
                     </MenuButton>
                     <MenuButton onClick={() => router.push("/post/postList")} as={Button} borderRadius={'0'} height={"3em"} backgroundColor={'#f3f3f3'} _hover={{ bg:'#dbdbdb'}}>
